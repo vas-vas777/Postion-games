@@ -113,21 +113,24 @@ for children in PreOrderIter(root):
         if max_num == max1:
             if isinstance(child1.list1[0], list) and len(child1.list1) >= 1:
                 for i in range(len(child1.list1)):
-                    children.list1.append(child1.list1[i])
+                    if max_num in child1.list1[i]:
+                        children.list1.append(child1.list1[i])
             else:
                 children.list1.append(child1.list1)
             # print("list1_num1=",children.list1)
         if max_num == max2:
             if isinstance(child2.list1[0], list) and len(child2.list1) >= 1:
                 for i in range(len(child2.list1)):
-                    children.list1.append(child2.list1[i])
+                    if max_num in child2.list1[i]:
+                        children.list1.append(child2.list1[i])
             else:
                 children.list1.append(child2.list1)
             # print("list1_num2=",children.list1)
         if max_num == max3:
             if isinstance(child3.list1[0], list) and len(child3.list1) >= 1:
                 for i in range(len(child3.list1)):
-                    children.list1.append(child3.list1[i])
+                    if max_num in child3.list1[i]:
+                        children.list1.append(child3.list1[i])
             else:
                 children.list1.append(child3.list1)
             # print("list1_num3=",children.list1)
@@ -166,21 +169,24 @@ for children in PreOrderIter(root):
         if max_num == max1:
             if isinstance(child1.list1[0], list) and len(child1.list1) >= 1:
                 for i in range(len(child1.list1)):
-                    children.list1.append(child1.list1[i])
+                    if max_num in child1.list1[i]:
+                        children.list1.append(child1.list1[i])
             else:
                 children.list1.append(child1.list1)
             # print("list1_num1=",children.list1)
         if max_num == max2:
             if isinstance(child2.list1[0], list) and len(child2.list1) >= 1:
                 for i in range(len(child2.list1)):
-                    children.list1.append(child2.list1[i])
+                    if max_num in child2.list1[i]:
+                        children.list1.append(child2.list1[i])
             else:
                 children.list1.append(child2.list1)
             # print("list1_num2=",children.list1)
         if max_num == max3:
             if isinstance(child3.list1[0], list) and len(child3.list1) >= 1:
                 for i in range(len(child3.list1)):
-                    children.list1.append(child3.list1[i])
+                    if max_num in child3.list1[i]:
+                        children.list1.append(child3.list1[i])
             else:
                 children.list1.append(child3.list1)
             # print("list1_num3=",children.list1)
@@ -218,21 +224,24 @@ for children in LevelOrderIter(root):
         if max_num == max1:
             if isinstance(child1.list1[0], list) and len(child1.list1) >= 1:
                 for i in range(len(child1.list1)):
-                    children.list1.append(child1.list1[i])
+                    if max_num in child1.list1[i]:
+                        children.list1.append(child1.list1[i])
             else:
                 children.list1.append(child1.list1)
             # print("list1_num1=",children.list1)
         if max_num == max2:
             if isinstance(child2.list1[0], list) and len(child2.list1) >= 1:
                 for i in range(len(child2.list1)):
-                    children.list1.append(child2.list1[i])
+                    if max_num in child2.list1[i]:
+                        children.list1.append(child2.list1[i])
             else:
                 children.list1.append(child2.list1)
             # print("list1_num2=",children.list1)
         if max_num == max3:
             if isinstance(child3.list1[0], list) and len(child3.list1) >= 1:
                 for i in range(len(child3.list1)):
-                    children.list1.append(child3.list1[i])
+                    if max_num in child3.list1[i]:
+                        children.list1.append(child3.list1[i])
             else:
                 children.list1.append(child3.list1)
             # print("list1_num3=",children.list1)
