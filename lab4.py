@@ -6,13 +6,13 @@ import random
 num = 0  # для обозначения номера вершины
 # depth = 0 #
 # создание корня и трёх детей
-root = Node(name=num, list1=list())
+root = Node(name=num, color='', list1=list())
 num += 1
-right = Node(name=num, list1=list(), parent=root)
+right = Node(name=num, color='', list1=list(), parent=root)
 num += 1
-middle = Node(name=num, list1=list(), parent=root)
+middle = Node(name=num, color='', list1=list(), parent=root)
 num += 1
-left = Node(name=num, list1=list(), parent=root)
+left = Node(name=num, color='', list1=list(), parent=root)
 
 flag = 0  # остановка алгоритма генерации дерева до глубины 5 (в коде 4)
 while flag == 0:
@@ -35,12 +35,22 @@ while flag == 0:
             if random_number == 1:
                 for i in range(3):
                     num += 1
-                    Node(name=num, list1=list(), parent=children)
+                    Node(name=num, color='', list1=list(), parent=children)
 
 
 def nodenamefunc(node):
-    return '%s:%s:%s' % (node.name, node.list1, node.depth)  # вывод в узлах (номер вершины, значение выиграшей
+    return '%s:%s:%s' % (node.name, node.list1, node.depth+1)  # вывод в узлах (номер вершины, значение выиграшей
     # и текущая глубина узла)
+
+
+def nodeattrfunc(node): # для раскрашивания вершин которые попали в оптимальный путь
+    for i in range(len(root.list1)):
+        if node == root:
+            return '%s' % "color=red"
+        else:
+            for j in range(len(node.list1)):
+                if node.list1[j] == root.list1[i]:
+                    return '%s' % "color=red"
 
 
 for children in PostOrderIter(root):  # заполнение листов случаным вектором из 3 чисел
@@ -155,12 +165,12 @@ for children in PreOrderIter(root):  # обход со второго уровн
             result31 = list(set(min_max_list3) & set(min_max_list1))  # пересечение листов 3 и 1
             result32 = list(set(min_max_list3) & set(min_max_list2))  # пересечение листов 3 и 2
 
-            print(min_max_list1)
-            print(min_max_list2)
-            print(min_max_list3)
-            print(result12)
-            print(result13)
-            print(result23)
+            # print(min_max_list1)
+            # print(min_max_list2)
+            # print(min_max_list3)
+            # print(result12)
+            # print(result13)
+            # print(result23)
             # если есть один строго доминирующий спсиок 1 или 2 или 3
             if result12 == [] and result13 == [] and min_max_list1 > min_max_list2 and min_max_list1 > min_max_list3:
                 flag_stop = 1
@@ -299,12 +309,12 @@ for children in PreOrderIter(root):  # всё то же самое что и д�
             result31 = list(set(min_max_list3) & set(min_max_list1))
             result32 = list(set(min_max_list3) & set(min_max_list2))
 
-            print(min_max_list1)
-            print(min_max_list2)
-            print(min_max_list3)
-            print(result12)
-            print(result13)
-            print(result23)
+            # print(min_max_list1)
+            # print(min_max_list2)
+            # print(min_max_list3)
+            # print(result12)
+            # print(result13)
+            # print(result23)
             # если есть один строго доминирующий
             if result12 == [] and result13 == [] and min_max_list1 > min_max_list2 and min_max_list1 > min_max_list3:
                 flag_stop = 1
@@ -438,12 +448,12 @@ for children in LevelOrderIter(root):
             result31 = list(set(min_max_list3) & set(min_max_list1))
             result32 = list(set(min_max_list3) & set(min_max_list2))
 
-            print(min_max_list1)
-            print(min_max_list2)
-            print(min_max_list3)
-            print(result12)
-            print(result13)
-            print(result23)
+            # print(min_max_list1)
+            # print(min_max_list2)
+            # print(min_max_list3)
+            # print(result12)
+            # print(result13)
+            # print(result23)
             # если есть один строго доминирующий
             if result12 == [] and result13 == [] and min_max_list1 > min_max_list2 and min_max_list1 > min_max_list3:
                 flag_stop = 1
@@ -499,23 +509,26 @@ for children in LevelOrderIter(root):
     else:
         break
 
-DotExporter(root, nodenamefunc=nodenamefunc,nodeattrfunc=lambda node: "shape=box",
+DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=lambda node: "shape=box",
             edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree2.dot")
 subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
+
+print("Цена игры:")
+print(root.list1)
 
 print("Оптимальный путь")
 for i in range(len(root.list1)):
     for children in LevelOrderIter(root):
         if children == root:
-            print(children.name,"-",children.list1[i])
+            print(children.name, "-", children.list1[i])
         else:
             for j in range(len(children.list1)):
                 if children.list1[j] == root.list1[i]:
-                    print(children.name,"-",children.list1[j])
-
-#DotExporter(root, nodenamefunc=nodenamefunc,nodeattrfunc=lambda node: "color=red, "
-#                                                                      "shape=box",edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree1.dot")  # вывод на картинку можно использовать команду
+                    print(children.name, "-", children.list1[j])
+                    DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=nodeattrfunc,
+                                edgeattrfunc=lambda parent, child: "style=bold").to_dotfile(
+                        "tree1.dot")  # вывод на картинку можно использовать команду
 # to_picture("tree.jpg")
 subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree1.dot', '-T', 'jpg', '-o',
                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root1.jpg'])
