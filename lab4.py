@@ -3,8 +3,8 @@ from anytree.exporter import DotExporter
 import subprocess
 import random
 
-num = 0 # для обозначения номера вершины
-#depth = 0 #
+num = 0  # для обозначения номера вершины
+# depth = 0 #
 # создание корня и трёх детей
 root = Node(name=num, list1=list())
 num += 1
@@ -14,7 +14,7 @@ middle = Node(name=num, list1=list(), parent=root)
 num += 1
 left = Node(name=num, list1=list(), parent=root)
 
-flag = 0 # остановка алгоритма генерации дерева до глубины 5 (в коде 4)
+flag = 0  # остановка алгоритма генерации дерева до глубины 5 (в коде 4)
 while flag == 0:
     for children in PostOrderIter(root):
         if children.is_leaf:
@@ -43,12 +43,12 @@ def nodenamefunc(node):
     # и текущая глубина узла)
 
 
-for children in PostOrderIter(root): # заполнение листов случаным вектором из 3 чисел
+for children in PostOrderIter(root):  # заполнение листов случаным вектором из 3 чисел
     if children.is_leaf:
         list_rand = random.sample(range(0, 15), 3)
         children.list1.append(list_rand)
 
-for children in PreOrderIter(root): # обход с вершины 3 и посещение её детей
+for children in PreOrderIter(root):  # обход с вершины 3 и посещение её детей
     if children.depth == 3 and children.is_leaf == False:
         # print(children.name)
         child1 = children.children[0]
@@ -71,11 +71,11 @@ for children in PreOrderIter(root): # обход с вершины 3 и посе
 
 # print([2, 11] > [9])
 
-for children in PreOrderIter(root): # обход со второго уровня и посещение детей
-    temp_list1 = [] # временный список для сбора всех значений i-го игрока из всех списков 1 ребёнка
+for children in PreOrderIter(root):  # обход со второго уровня и посещение детей
+    temp_list1 = []  # временный список для сбора всех значений i-го игрока из всех списков 1 ребёнка
     temp_list2 = []
     temp_list3 = []
-    max1 = max2 = max3 = 0 # значения макс и миним элементов списков 
+    max1 = max2 = max3 = 0  # значения макс и миним элементов списков
     min1 = min2 = min3 = 0
     if children.depth == 2 and children.is_leaf == False:
         # print(children.name)
@@ -105,7 +105,7 @@ for children in PreOrderIter(root): # обход со второго уровн�
         max_max_num = max(max1, max2, max3)
         max_min_num = min(min1, min2, min3)
         # случай когда в каждой вершине по одному списку
-        if len(temp_list3) == 1 and len(temp_list2) == 1 and len(temp_list1) == 1: # случай когда все списки
+        if len(temp_list3) == 1 and len(temp_list2) == 1 and len(temp_list1) == 1:  # случай когда все списки
             if max_max_num == max1:
                 if isinstance(child1.list1[0], list) and len(child1.list1) >= 1:
                     for i in range(len(child1.list1)):
@@ -130,7 +130,7 @@ for children in PreOrderIter(root): # обход со второго уровн�
                 else:
                     children.list1.append(child3.list1)
                 # print("list1_num3=",children.list1)
-        else: #случай когда в вершине может быть несколько списков
+        else:  # случай когда в вершине может быть несколько списков
             # алгоритм работает так: у каждой вершины из списков берется минимальный и максимальный элементы
             # далее создаётся отрезок [min,max] для каждой вершины и рассматриваются их пересечения
             # после нахождения пересечений проверяются следующие условия (см. ниже)
@@ -213,11 +213,11 @@ for children in PreOrderIter(root): # обход со второго уровн�
                     for i in range(len(child3.list1)):
                         children.list1.append(child3.list1[i])
 
-DotExporter(root, nodenamefunc=nodenamefunc).to_dotfile("tree2.dot")
-subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
-                 'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
+# DotExporter(root, nodenamefunc=nodenamefunc).to_dotfile("tree2.dot")
+# subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
+#                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
 
-for children in PreOrderIter(root): # всё то же самое что и для предыдущего уровня
+for children in PreOrderIter(root):  # всё то же самое что и для предыдущего уровня
     temp_list1 = []
     temp_list2 = []
     temp_list3 = []
@@ -363,7 +363,7 @@ for children in LevelOrderIter(root):
     temp_list3 = []
     max1 = max2 = max3 = 0
     min1 = min2 = min3 = 0
-    if children.depth == 0 and children.is_leaf == False: # всё то же самое только для корня
+    if children.depth == 0 and children.is_leaf == False:  # всё то же самое только для корня
         # print(children.name)
         child1 = children.children[0]
         if isinstance(child1.list1[0], list) and len(child1.list1) >= 1:
@@ -499,7 +499,23 @@ for children in LevelOrderIter(root):
     else:
         break
 
-DotExporter(root, nodenamefunc=nodenamefunc).to_dotfile("tree1.dot") # вывод на картинку можно использовать команду
+DotExporter(root, nodenamefunc=nodenamefunc,nodeattrfunc=lambda node: "shape=box",
+            edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree2.dot")
+subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
+                 'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
+
+print("Оптимальный путь")
+for i in range(len(root.list1)):
+    for children in LevelOrderIter(root):
+        if children == root:
+            print(children.name,"-",children.list1[i])
+        else:
+            for j in range(len(children.list1)):
+                if children.list1[j] == root.list1[i]:
+                    print(children.name,"-",children.list1[j])
+
+#DotExporter(root, nodenamefunc=nodenamefunc,nodeattrfunc=lambda node: "color=red, "
+#                                                                      "shape=box",edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree1.dot")  # вывод на картинку можно использовать команду
 # to_picture("tree.jpg")
 subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree1.dot', '-T', 'jpg', '-o',
                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root1.jpg'])
