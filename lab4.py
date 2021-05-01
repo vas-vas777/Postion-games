@@ -90,7 +90,8 @@ def nodeattrfunc(node):  # для раскрашивания вершин кот
             for j in range(len(node.list1)):
                 if node.list1[j] == root.list1[i]:
                     return '%s' % "color=red shape=box"
-                return '%s' % "shape=box"
+                #else:
+                    #return '%s' % "shape=box"
 
 
 def last_level(depth):
@@ -111,9 +112,9 @@ def last_level(depth):
             max_num = max(list_of_wins_player)
             # print(max_num)
             # print("max_num=", max_num) выбор максимального выигрыша у игрока 1
-            print(list_of_wins_player)
+            #print(list_of_wins_player)
             for i in range(len(list_of_wins_player)):
-                print(list_of_wins_player[i],'-',max_num)
+                #print(list_of_wins_player[i],'-',max_num)
                 if max_num == list_of_wins_player[i]:
                     node.list1.append(list_of_leaves[i].list1[0])
             list_of_wins_player.clear()
@@ -137,7 +138,7 @@ def level_middle(depth):
                 list_of_leaves.append(child)
                 for j in range(len(child.list1)):
                     list_of_wins_player.append(child.list1[j][node.player])
-                print(list_of_wins_player)
+                #print(list_of_wins_player)
                 list_of_max_values_in_each_vertex.append(max(list_of_wins_player))
                 list_of_min_values_in_each_vertex.append(min(list_of_wins_player))
                 list_of_wins_player.clear()
@@ -157,9 +158,9 @@ def level_middle(depth):
                 # игроков
                 max_num = max(list_of_max_values_in_each_vertex)
                 count = 0
-                print(list_of_max_values_in_each_vertex)
+                #print(list_of_max_values_in_each_vertex)
                 for i in range(len(list_of_max_values_in_each_vertex)):
-                    print(list_of_max_values_in_each_vertex[i], '-', max_num)
+                    #print(list_of_max_values_in_each_vertex[i], '-', max_num)
                     # count+=1
                     if max_num == list_of_max_values_in_each_vertex[i]:
                         #print(list_of_max_values_in_each_vertex.index(wins_of_player))
@@ -181,8 +182,8 @@ def level_middle(depth):
                 # алгоритм работает так: у каждой вершины из списков берется минимальный и максимальный элементы
                 # далее создаётся отрезок [min,max] для каждой вершины и рассматриваются их пересечения
                 # после нахождения пересечений проверяются следующие условия (см. ниже)
-                #print(list_of_max_values_in_each_vertex)
-                #print(list_of_min_values_in_each_vertex)
+                print(list_of_max_values_in_each_vertex)
+                print(list_of_min_values_in_each_vertex)
                 for i in range(len(list_of_max_values_in_each_vertex)):
                     if list_of_max_values_in_each_vertex[i] == list_of_min_values_in_each_vertex[i]:
                         list_of_lists_min_max_in_each_vertex.append([list_of_min_values_in_each_vertex[i],
@@ -193,11 +194,13 @@ def level_middle(depth):
                                                                                    i] + 1)))
 
                 max_list_among_children = max(list_of_lists_min_max_in_each_vertex)
-                # print(list_of_lists_min_max_in_each_vertex)
+                print(list_of_lists_min_max_in_each_vertex)
                 # print(list_of_leaves)
                 for i in range(len(list_of_lists_min_max_in_each_vertex)):
+                    print(max_list_among_children,'-',list_of_lists_min_max_in_each_vertex[i])
                     if list(set(max_list_among_children) & set(list_of_lists_min_max_in_each_vertex[i])):
                         for j in range(len(list_of_leaves[i].list1)):
+                            print('-',list_of_leaves[i].list1[j])
                             node.list1.append(list_of_leaves[i].list1[j])
                 list_of_wins_player.clear()
                 list_of_max_values_in_each_vertex.clear()
@@ -452,10 +455,10 @@ high_value_win = 15
 begin_game()
 generate_tree(depth, number_players, low_value_win, high_value_win)
 last_level(depth)
-DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=lambda node: "shape=box",
-            edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree2.dot")
-subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
-                 'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
+# DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=lambda node: "shape=box",
+#             edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree2.dot")
+# subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
+#                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
 depth -= 1
 while depth > 0:
     depth -= 1
@@ -465,16 +468,17 @@ print("Цена игры:")
 print(root.list1)
 
 print("Оптимальный путь")
-# for i in range(len(root.list1)):
-#     for children in LevelOrderIter(root):
-#         if children == root:
-#             print(children.name, "-", children.list1[i])
-#         else:
-#             for j in range(len(children.list1)):
-#                 if children.list1[j] == root.list1[i]:
-#                     print(children.name, "-", children.list1[j])
-DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=nodeattrfunc).to_dotfile(
-    "tree1.dot")  # вывод на картинку можно использовать команду
+for i in range(len(root.list1)):
+    for children in LevelOrderIter(root):
+        if children == root:
+            print(children.name, "-", children.list1[i])
+        else:
+            for j in range(len(children.list1)):
+                if children.list1[j] == root.list1[i]:
+                    print(children.name, "-", children.list1[j])
+                    DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=nodeattrfunc,
+                                edgeattrfunc=lambda parent, child: "style=bold").to_dotfile(
+                        "tree1.dot")  # вывод на картинку можно использовать команду
 
 subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree1.dot', '-T', 'jpg', '-o',
                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root1.jpg'])
