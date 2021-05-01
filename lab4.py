@@ -15,6 +15,7 @@ middle = Node
 list_of_lists_of_root = list()
 list_of_players_by_levels = list()
 list_of_strateges_players = list()
+colors = ["red", "yellow", "green", "gold", "orange", "fuchsia"]
 
 
 def sequence_of_players_in_game(depth, number_player):
@@ -85,25 +86,23 @@ def nodenamefunc(node):
 
 def nodeattrfunc(node):  # для раскрашивания вершин которые попали в оптимальный путь
     for i in range(len(root.list1)):
+        color = colors[i % len(colors)]
         if node == root:
-            return '%s' % "color=red style=bold"
+            return '%s' % ""
         else:
             for j in range(len(node.list1)):
-                if node.list1[j] == root.list1[i]:
-                    return '%s' % "color=red style=bold"
-                # else:
-                # return '%s' % "shape=box"
+                if node.list1[j] == root.list1[i] and len(node.list1) == 1:
+                    return '%s' % "color=" + color
 
-def edgeattrfunc(node,child):
+
+def edgeattrfunc(parent, child):
     for i in range(len(root.list1)):
-        #if node == root:
-            #return '%s' % "color=red shape=box"
-        #else:
-        for j in range(len(node.list1)):
-            if node.list1[j] == root.list1[i]:
-                return '%s' % "color=red shape=box"
-            # else
-            #     return '%s' % "color=red shape=box"
+        color = colors[i % len(colors)]
+        for j in range(len(child.list1)):
+            if child.list1[j] == root.list1[i]:
+                print(child.name, child.list1[j])
+                return '%s' % "color=" + color
+
 
 def last_level(depth):
     list_of_wins_player = list()
@@ -186,8 +185,8 @@ def level_middle(depth):
                 # алгоритм работает так: у каждой вершины из списков берется минимальный и максимальный элементы
                 # далее создаётся отрезок [min,max] для каждой вершины и рассматриваются их пересечения
                 # после нахождения пересечений проверяются следующие условия (см. ниже)
-                print(list_of_max_values_in_each_vertex)
-                print(list_of_min_values_in_each_vertex)
+                # print(list_of_max_values_in_each_vertex)
+                # print(list_of_min_values_in_each_vertex)
                 for i in range(len(list_of_max_values_in_each_vertex)):
                     if list_of_max_values_in_each_vertex[i] == list_of_min_values_in_each_vertex[i]:
                         list_of_lists_min_max_in_each_vertex.append([list_of_min_values_in_each_vertex[i],
@@ -196,22 +195,22 @@ def level_middle(depth):
                         list_of_lists_min_max_in_each_vertex.append(list(range(list_of_min_values_in_each_vertex[i],
                                                                                list_of_max_values_in_each_vertex[
                                                                                    i] + 1)))
-                max_list_among_children=list()
+                # max_list_among_children = list()
                 # for i in range(len(list_of_lists_min_max_in_each_vertex)):
                 #     max_list_among_children.append(set(list_of_lists_min_max_in_each_vertex[i]))
                 # print(max_list_among_children)
                 max_list_among_children = np.max(list_of_lists_min_max_in_each_vertex)
-                print('max=',max_list_among_children)
+                # print('max=', max_list_among_children)
                 for i in range(len(list_of_lists_min_max_in_each_vertex)):
                     if max_list_among_children in list_of_lists_min_max_in_each_vertex[i]:
-                        max_list_among_children=list_of_lists_min_max_in_each_vertex[i]
+                        max_list_among_children = list_of_lists_min_max_in_each_vertex[i]
                         break
                 # print(list_of_leaves)
                 for i in range(len(list_of_lists_min_max_in_each_vertex)):
-                    print(max_list_among_children, '-', list_of_lists_min_max_in_each_vertex[i])
+                    # print(max_list_among_children, '-', list_of_lists_min_max_in_each_vertex[i])
                     if list(set(max_list_among_children) & set(list_of_lists_min_max_in_each_vertex[i])):
                         for j in range(len(list_of_leaves[i].list1)):
-                            print('-', list_of_leaves[i].list1[j])
+                            # print('-', list_of_leaves[i].list1[j])
                             node.list1.append(list_of_leaves[i].list1[j])
                 list_of_wins_player.clear()
                 list_of_max_values_in_each_vertex.clear()
@@ -223,21 +222,21 @@ def level_middle(depth):
 
 
 print("Введите глубину дерева")
-# depth = int(input())
-depth = 5
+depth = int(input())
+#depth = 5
 print("Введите количество игроков")
-#number_players = int(input())
-number_players = 3
-# print("Введите стратегии игроков")
-# for i in range(number_players):
-#     list_of_strateges_players.append(int(input()))
-list_of_strateges_players = [3, 3, 3]
+number_players = int(input())
+#number_players = 3
+print("Введите стратегии игроков")
+for i in range(number_players):
+    list_of_strateges_players.append(int(input()))
+#list_of_strateges_players = [3, 3, 3]
 print("Введите нижний выигрыш из диапазона выигрышей")
-#low_value_win = int(input())
-low_value_win = 0
+low_value_win = int(input())
+#low_value_win = 0
 print("Введите верхний выигрыш из диапазона выигрышей")
-#high_value_win = int(input())
-high_value_win = 15
+high_value_win = int(input())
+#high_value_win = 15
 begin_game()
 generate_tree(depth - 1, number_players, low_value_win, high_value_win)
 last_level(depth - 1)
@@ -264,7 +263,7 @@ for i in range(len(root.list1)):
                     print(children.name, "-", children.list1[j])
                     DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=nodeattrfunc,
                                 edgeattrfunc=edgeattrfunc).to_dotfile(
-                        "tree1.dot")  # вывод на картинку можно использовать команду
+                        "tree1.dot")
 
 subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree1.dot', '-T', 'jpg', '-o',
                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root1.jpg'])
