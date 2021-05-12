@@ -56,12 +56,12 @@ def generate_tree(depth, number_players, low_value_win, high_value_win):
         for children in PostOrderIter(root, maxlevel=depth):  # случайный выбор продолжать веришну вниз или нет
             if children.is_leaf:
                 random_number = random.randint(0, 1)
-
                 if random_number == 1:
-                    list_of_strateges_players.index(children.number_edges)
-                    strateges_of_player = list_of_strateges_players[
-                        (list_of_strateges_players.index(children.number_edges)
-                         + 1) % len(list_of_strateges_players)]
+                    strateges_of_player = list_of_strateges_players[children.player-1]
+                    #list_of_strateges_players[
+                    #     (list_of_strateges_players.index(children.number_edges)
+                    #      + 1) % len(list_of_strateges_players)]
+                    #print(strateges_of_player)
                     player = (children.player + 1) % number_players
                     for i in range(children.number_edges):
                         num += 1
@@ -240,10 +240,9 @@ high_value_win = int(input())
 begin_game()
 generate_tree(depth - 1, number_players, low_value_win, high_value_win)
 last_level(depth - 1)
-# DotExporter(root, nodenamefunc=nodenamefunc, nodeattrfunc=lambda node: "shape=box",
-#             edgeattrfunc=lambda parent, child: "style=bold").to_dotfile("tree2.dot")
-# subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
-#                  'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
+DotExporter(root, nodenamefunc=nodenamefunc).to_dotfile("tree2.dot")
+subprocess.call(['C:\\Program Files\\Graphviz\\bin\\dot.exe', 'tree2.dot', '-T', 'jpg', '-o',
+                 'C:\\МГТУ\\ТеорияИгр\\lab4-py\\root2.jpg'])
 depth -= 1
 while depth > 0:
     depth -= 1
